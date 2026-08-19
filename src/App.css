@@ -1,0 +1,17 @@
+@keyframes floatOrb1 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  50% { transform: translate(-40px, 50px) scale(1.15); }
+}
+
+@keyframes floatOrb2 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  50% { transform: translate(50px, -30px) scale(1.2); }
+}
+
+.animate-orb-1 {
+  animation: floatOrb1 14s ease-in-out infinite;
+}
+
+.animate-orb-2 {
+  animation: floatOrb2 18s ease-in-out infinite;
+}
