@@ -1,13 +1,12 @@
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { SplitText } from "gsap/SplitText";
 
 import baseImage from "../assets/88.jpg";
 import lampOverlay from "../assets/01.png"; 
 import nextImage from "../assets/5.jpg";
 
-gsap.registerPlugin(ScrollTrigger, SplitText);
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero() {
   const heroRef = useRef(null);
@@ -28,11 +27,10 @@ export default function Hero() {
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia();
-      const split = new SplitText(".hero-title-intro", { type: "chars" });
 
       // =========================
       // PERFORMANCE OPTIMIZATION
-      // Force hardware acceleration on the heaviest elements before animating
+      // Removed "filter" and "clip-path" from willChange to fix the infinite browser loading/freezing issue
       // =========================
       gsap.set([
         imageWrapperRef.current, 
@@ -44,7 +42,7 @@ export default function Hero() {
         ".next-world-content",
         ".final-text-anim"
       ], { 
-        willChange: "transform, opacity, clip-path, filter",
+        willChange: "transform, opacity",
         force3D: true
       });
 
@@ -114,7 +112,7 @@ export default function Hero() {
           onComplete: () => {
             gsap.set(".title-span-wrap", { overflow: "visible" });
 
-            gsap.to(split.chars, {
+            gsap.to(".hero-title-left, .hero-title-right", {
               textShadow: "0px 0px 40px rgba(255, 213, 154, 0.85), 0px 0px 15px rgba(255, 213, 154, 0.5)",
               opacity: 0.6,
               duration: 2.5,
@@ -129,11 +127,11 @@ export default function Hero() {
 
         intro
           .from(".hero-logo", { y: -30, opacity: 0, duration: 0.8 })
-          .from(split.chars, {
+          .from([".hero-title-left", ".hero-title-right"], {
             y: 40, 
             color: "#FFD59A", 
             opacity: 0,
-            stagger: { each: 0.04, from: "start" },
+            stagger: 0.2,
             duration: 0.6, 
             ease: "sine.out"
           }, "-=0.4")
@@ -405,7 +403,6 @@ export default function Hero() {
                 className="absolute inset-0 z-[1] h-full w-full object-cover object-[center_35%] max-h-[100dvh] rounded-none will-change-transform"
               />
 
-              {/* Changed hidden lg:block to xl:block to cover the 1024px iPad Pro threshold */}
               <div
                 ref={lightGlowRef}
                 className="pointer-events-none absolute z-[2] mix-blend-screen opacity-0 hidden xl:block"
@@ -419,7 +416,6 @@ export default function Hero() {
                 }}
               />
 
-              {/* Changed hidden lg:block to xl:block to cover the 1024px iPad Pro threshold */}
               <img
                 ref={lampRef}
                 src={lampOverlay}
@@ -465,7 +461,6 @@ export default function Hero() {
             className="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-center px-4 md:px-8 text-center overflow-hidden"
           >
             <div className="inline-block w-full" style={{ filter: "drop-shadow(0px 0px 30px rgba(81, 65, 36, 1))", transform: "translateZ(0)" }}>
-              {/* Using strict VW max-widths instead of rem-based max-widths to guarantee it fits safely inside the shrinking clip-path */}
               <h2 className="welcome-text-anim premium-text-shimmer mx-auto w-full max-w-[85vw] font-serif text-3xl font-medium leading-tight md:max-w-[65vw] md:text-4xl lg:max-w-[60vw] lg:text-[3.6vw] xl:max-w-[55vw] whitespace-normal break-words">
                 Welcome to the world of modern furniture.
               </h2>
